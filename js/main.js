@@ -1,12 +1,41 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     const HEADERS = ['№', "Username", "Score"];
+    var BORAD = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+    ]
 
     const createBoard = () => {
         const body = document.querySelector('body');
         const section = document.createElement('section');
         section.className = 'boardSection';
         body.appendChild(section);
+    };
+
+    const addNumbersBoard = () => {
+        const boardSection = document.querySelector('.boardSection');
+
+        const boardContainer = document.createElement('div');
+        boardContainer.className = 'numContainer';
+
+        BORAD.forEach((row, rowIndex) => {
+            row.forEach((cell, colIndex) => {
+                const cellElement = document.createElement('div');
+                cellElement.className = 'numCell';
+                cellElement.dataset.row = rowIndex;
+                cellElement.dataset.col = colIndex;
+
+                const numberText = document.createTextNode(cell === 0 ? '' : cell.toString());
+                cellElement.appendChild(numberText);
+
+                boardContainer.appendChild(cellElement);
+            });
+        });
+
+        boardSection.appendChild(boardContainer);
     };
 
     const createResultsTable = () => {
@@ -41,4 +70,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
     createBoard();
     createResultsTable();
+    addNumbersBoard();
 });
