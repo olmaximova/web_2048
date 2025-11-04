@@ -9,10 +9,10 @@ document.addEventListener("DOMContentLoaded", function () {
     ]
 
     const createBoard = () => {
-        const body = document.querySelector('body');
+        const main = document.querySelector('main');
         const section = document.createElement('section');
         section.className = 'boardSection';
-        body.appendChild(section);
+        main.appendChild(section);
     };
 
     const addNumbersBoard = () => {
@@ -39,6 +39,8 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     const createResultsTable = () => {
+        const main = document.querySelector('main');
+
         const div = document.createElement('div');
         div.className = 'tableResultsContainer';
 
@@ -65,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
         table.append(thead, tbody);
         div.appendChild(table);
 
-        document.body.appendChild(div);
+        main.appendChild(div);
     };
 
     createBoard();
