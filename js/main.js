@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const section = document.createElement('section');
         section.className = 'boardSection';
         main.appendChild(section);
+        addNumbersBoard();
         updateBoard();
         updateBoard();
     };
@@ -89,16 +90,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const updateBoard = () => {
         const num = generateNumsGrid();
+
         const row = num.row;
         const col = num.col;
         const values = [2, 4];
 
         if (BOARD[row][col] == 0) {
+            const tile = document.createElement('div');
+            tile.className = 'tile';
             BOARD[row][col] = values[Math.floor(Math.random() * values.length)];
+            tile.textContent = BOARD[row][col].toString();
+            tile.setAttribute('data-value', BOARD[row][col].toString());
+            
+            const element = document.querySelector(`.numCell[data-row="${row}"][data-col="${col}"]`);
+            element.appendChild(tile);
+
         }
     }
 
     createBoard();
     createResultsTable();
-    addNumbersBoard();
 });
