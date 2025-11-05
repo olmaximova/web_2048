@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     const HEADERS = ['№', "Username", "Score"];
-    var BORAD = [
+    var BOARD = [
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0],
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const boardContainer = document.createElement('div');
         boardContainer.className = 'numContainer';
 
-        BORAD.forEach((row, rowIndex) => {
+        BOARD.forEach((row, rowIndex) => {
             row.forEach((cell, colIndex) => {
                 const cellElement = document.createElement('div');
                 cellElement.className = 'numCell';
