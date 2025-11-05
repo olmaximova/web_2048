@@ -59,14 +59,8 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     const createResultsTable = () => {
-        const main = document.querySelector('main');
-
         const div = document.createElement('div');
         div.className = 'tableResultsContainer';
-
-        const title = document.createElement('h2');
-        title.textContent = 'Leaderboard';
-        div.appendChild(title);
 
         const table = document.createElement('table');
         table.className = 'tableResults';
@@ -87,8 +81,59 @@ document.addEventListener("DOMContentLoaded", function () {
         table.append(thead, tbody);
         div.appendChild(table);
 
-        main.appendChild(div);
+        return div;
     };
+
+    const leadersModal = () => {
+        const main = document.querySelector('main');
+
+        const modal = document.createElement('section');
+        modal.className = 'modalResultsLeaders';
+        modal.style.display = 'none';
+
+        const content = document.createElement('div');
+        content.className = 'modalContent';
+
+        const modalHeader = document.createElement('div');
+        modalHeader.className = 'modalHeader';
+
+        const title = document.createElement('h2');
+        title.textContent = 'Leaderboard';
+
+        const closeBtn = document.createElement('span');
+        closeBtn.className = 'closeBtn';
+        closeBtn.textContent = 'x'; 
+
+        closeBtn.addEventListener('click', () => openCloseModal('close'));
+        document.getElementById('leadersBtn').addEventListener('click', () => openCloseModal('open'));
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                openCloseModal('close');
+            }
+        });
+
+        modalHeader.append(title, closeBtn);
+
+        const table = createResultsTable();
+        content.append(modalHeader, table);
+        modal.appendChild(content);
+        main.appendChild(modal);
+    }
+
+    const openCloseModal = (type) => {
+        const modal = document.querySelector('.modalResultsLeaders');
+
+        switch (type) {
+            case 'close':
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+                break;
+            case 'open':
+                modal.style.display = 'flex';
+                modal.classList.add('show');
+                break;
+        }
+    }
 
     const generateNumsGrid = () => {
         const squares = [];
@@ -125,5 +170,5 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     createBoard();
-    createResultsTable();
+    leadersModal();
 });
