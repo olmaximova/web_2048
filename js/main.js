@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return null;
     };
 
-    const HEADERS = ['№', "Username", "Score"];
+    const HEADERS = ["Username", "Score", "Submission Date"];
     var BOARD = loadGameState() || [
         [0, 0, 0, 0],
         [0, 0, 0, 0],
