@@ -1,12 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    const loadGameState = () => {
+        const saved = localStorage.getItem('game');
+        if (saved) {
+            const gameState = JSON.parse(saved);
+            return gameState.board;
+        }
+        return null;
+    };
+
     const HEADERS = ['№', "Username", "Score"];
-    var BOARD = [
+    var BOARD = loadGameState() || [
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0]
-    ]
+    ];
 
     const createBoard = () => {
         const main = document.querySelector('main');
@@ -14,8 +23,11 @@ document.addEventListener("DOMContentLoaded", function () {
         section.className = 'boardSection';
         main.appendChild(section);
         addNumbersBoard();
-        updateBoard();
-        updateBoard();
+        if (isBoardEmpty()) {
+            updateBoard();
+            updateBoard();
+            saveCurrentState();
+        }
     };
 
     const addNumbersBoard = () => {
@@ -31,8 +43,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 cellElement.dataset.row = rowIndex;
                 cellElement.dataset.col = colIndex;
 
-                const numberText = document.createTextNode(cell === 0 ? '' : cell.toString());
-                cellElement.appendChild(numberText);
+                if (cell !== 0) {
+                    const tile = document.createElement('div');
+                    tile.className = 'tile';
+                    tile.textContent = cell.toString();
+                    tile.setAttribute('data-value', cell.toString());
+                    cellElement.appendChild(tile);
+                }
 
                 boardContainer.appendChild(cellElement);
             });
@@ -90,23 +107,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const updateBoard = () => {
         const num = generateNumsGrid();
-
         const row = num.row;
         const col = num.col;
         const values = [2, 4];
 
         if (BOARD[row][col] == 0) {
-            const tile = document.createElement('div');
-            tile.className = 'tile';
             BOARD[row][col] = values[Math.floor(Math.random() * values.length)];
-            tile.textContent = BOARD[row][col].toString();
-            tile.setAttribute('data-value', BOARD[row][col].toString());
-            
-            const element = document.querySelector(`.numCell[data-row="${row}"][data-col="${col}"]`);
-            element.appendChild(tile);
-
         }
     }
+
+    const saveCurrentState = () => {
+        localStorage.setItem('game', JSON.stringify({ board: BOARD }));
+    };
+
+    const isBoardEmpty = () => {
+        return BOARD.every(row => row.every(cell => cell == 0));
+    };
 
     createBoard();
     createResultsTable();
