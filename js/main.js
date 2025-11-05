@@ -13,6 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const section = document.createElement('section');
         section.className = 'boardSection';
         main.appendChild(section);
+        updateBoard();
+        updateBoard();
     };
 
     const addNumbersBoard = () => {
@@ -69,6 +71,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
         main.appendChild(div);
     };
+
+    const generateNumsGrid = () => {
+        const squares = [];
+
+        BOARD.forEach((row, rowIndex) => {
+            row.forEach((cell, colIndex) => {
+                if (cell === 0) {
+                    squares.push({ row: rowIndex, col: colIndex });
+                }
+            });
+        });
+
+        const randomNumber = Math.floor(Math.random() * squares.length);
+        return squares[randomNumber];
+    };
+
+    const updateBoard = () => {
+        const num = generateNumsGrid();
+        const row = num.row;
+        const col = num.col;
+        const values = [2, 4];
+
+        if (BOARD[row][col] == 0) {
+            BOARD[row][col] = values[Math.floor(Math.random() * values.length)];
+        }
+    }
 
     createBoard();
     createResultsTable();
