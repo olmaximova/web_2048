@@ -1,3 +1,5 @@
+import { createElement } from "./elements.js";
+
 const loadGameState = () => {
     const saved = localStorage.getItem('game');
     if (saved) {
@@ -17,9 +19,11 @@ var BOARD = loadGameState() || [
 
 const createBoard = () => {
     const main = document.querySelector('main');
-    const section = document.createElement('section');
-    section.className = 'boardSection';
+
+    const section = createElement({ tag: 'section', className: 'boardSection' })
+
     main.appendChild(section);
+
     addNumbersBoard();
     if (isBoardEmpty()) {
         updateBoard();
@@ -31,21 +35,28 @@ const createBoard = () => {
 const addNumbersBoard = () => {
     const boardSection = document.querySelector('.boardSection');
 
-    const boardContainer = document.createElement('div');
-    boardContainer.className = 'numContainer';
+    const boardContainer = createElement({ tag: 'div', className: 'numContainer' })
 
     BOARD.forEach((row, rowIndex) => {
         row.forEach((cell, colIndex) => {
-            const cellElement = document.createElement('div');
-            cellElement.className = 'numCell';
-            cellElement.dataset.row = rowIndex;
-            cellElement.dataset.col = colIndex;
+
+            const cellElement = createElement({
+                tag: 'div',
+                className: 'numCell',
+                dataset: { row: rowIndex, col: colIndex }
+            });
 
             if (cell !== 0) {
-                const tile = document.createElement('div');
-                tile.className = 'tile';
-                tile.textContent = cell.toString();
-                tile.setAttribute('data-value', cell.toString());
+
+                const tile = createElement({
+                    tag: 'div',
+                    className: 'tile',
+                    text: cell.toString(),
+                    attributes: {
+                        'data-value': cell.toString()
+                    }
+                });
+
                 cellElement.appendChild(tile);
             }
 
@@ -57,21 +68,18 @@ const addNumbersBoard = () => {
 };
 
 const createResultsTable = () => {
-    const div = document.createElement('div');
-    div.className = 'tableResultsContainer';
 
-    const table = document.createElement('table');
-    table.className = 'tableResults';
+    const div = createElement({ tag: 'div', className: 'tableResultsContainer' });
+
+    const table = createElement({ tag: 'table', className: 'tableResults' });
 
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
 
-    const tbody = document.createElement("tbody");
-    tbody.id = "results-tbody";
+    const tbody = createElement({ tag: 'tbody', attributes: { id: "results-tbody" } });
 
     HEADERS.forEach((header) => {
-        const th = document.createElement("th");
-        th.textContent = header;
+        const th = createElement({ tag: 'th', text: header })
         headerRow.appendChild(th);
     });
 
@@ -85,30 +93,33 @@ const createResultsTable = () => {
 const leadersModal = () => {
     const main = document.querySelector('main');
 
-    const modal = document.createElement('section');
-    modal.className = 'modalResultsLeaders';
-    modal.style.display = 'none';
-
-    const content = document.createElement('div');
-    content.className = 'modalContent';
-
-    const modalHeader = document.createElement('div');
-    modalHeader.className = 'modalHeader';
-
-    const title = document.createElement('h2');
-    title.textContent = 'Leaderboard';
-
-    const closeBtn = document.createElement('span');
-    closeBtn.className = 'closeBtn';
-    closeBtn.textContent = 'x';
-
-    closeBtn.addEventListener('click', () => openCloseModal('close'));
-    document.getElementById('leadersBtn').addEventListener('click', () => openCloseModal('open'));
-    modal.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            openCloseModal('close');
+    const modal = createElement({
+        tag: "section",
+        className: "modalResultsLeaders",
+        attributes: { style: "display: none" },
+        events: {
+            click: (event) => {
+                if (event.target === modal) {
+                    openCloseModal('close');
+                }
+            }
         }
     });
+
+    const content = createElement({ tag: 'div', className: 'modalContent' })
+
+    const modalHeader = createElement({ tag: 'div', className: 'modalHeader' })
+
+    const title = createElement({ tag: 'h2', text: 'Leaderboard' })
+
+    const closeBtn = createElement({
+        text: "x",
+        className: "closeBtn",
+        events: { click: () => openCloseModal('close') }
+    });
+
+    document.getElementById('leadersBtn').addEventListener('click', () => openCloseModal('open'));
+
 
     modalHeader.append(title, closeBtn);
 
