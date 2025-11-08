@@ -1,4 +1,5 @@
 import { createElement } from "./elements.js";
+import { initMobileControls } from "./game.js";
 
 const loadGameState = () => {
     const saved = localStorage.getItem('game');
@@ -10,12 +11,22 @@ const loadGameState = () => {
 };
 
 const HEADERS = ["Username", "Score", "Submission Date"];
-var BOARD = loadGameState() || [
+export var BOARD = loadGameState() || [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0]
 ];
+
+const startBtn = document.getElementById('startBtn');
+
+const startGame = () => {
+    addNumbersBoard();
+    initMobileControls(); 
+    startBtn.style.display = 'none'; 
+}
+
+startBtn.addEventListener('click', startGame);
 
 const createBoard = () => {
     const main = document.querySelector('main');
@@ -24,7 +35,6 @@ const createBoard = () => {
 
     main.appendChild(section);
 
-    addNumbersBoard();
     if (isBoardEmpty()) {
         updateBoard();
         updateBoard();
@@ -67,6 +77,39 @@ const addNumbersBoard = () => {
     boardSection.appendChild(boardContainer);
 };
 
+export const renderBoard = () => {
+    const boardContainer = document.querySelector('.numContainer');
+
+    while (boardContainer.firstChild) {
+        boardContainer.removeChild(boardContainer.firstChild);
+    }
+
+    BOARD.forEach((row, rowIndex) => {
+        row.forEach((cell, colIndex) => {
+
+            const cellElement = createElement({
+                tag: 'div',
+                className: 'numCell',
+                dataset: { row: rowIndex, col: colIndex }
+            })
+
+            if (cell !== 0) {
+                const tile = createElement({
+                    tag: 'div',
+                    className: 'tile',
+                    text: cell.toString(),
+                    attributes: {
+                        'data-value': cell.toString()
+                    }
+                })
+                cellElement.appendChild(tile);
+            }
+
+            boardContainer.appendChild(cellElement);
+        });
+    });
+};
+
 const createResultsTable = () => {
 
     const div = createElement({ tag: 'div', className: 'tableResultsContainer' });
@@ -74,6 +117,7 @@ const createResultsTable = () => {
     const table = createElement({ tag: 'table', className: 'tableResults' });
 
     const thead = document.createElement("thead");
+
     const headerRow = document.createElement("tr");
 
     const tbody = createElement({ tag: 'tbody', attributes: { id: "results-tbody" } });
@@ -120,10 +164,10 @@ const leadersModal = () => {
 
     document.getElementById('leadersBtn').addEventListener('click', () => openCloseModal('open'));
 
-
     modalHeader.append(title, closeBtn);
 
     const table = createResultsTable();
+
     content.append(modalHeader, table);
     modal.appendChild(content);
     main.appendChild(modal);
@@ -156,10 +200,11 @@ const generateNumsGrid = () => {
     });
 
     const randomNumber = Math.floor(Math.random() * squares.length);
+
     return squares[randomNumber];
 };
 
-const updateBoard = () => {
+export const updateBoard = () => {
     const num = generateNumsGrid();
     const row = num.row;
     const col = num.col;
@@ -170,7 +215,7 @@ const updateBoard = () => {
     }
 }
 
-const saveCurrentState = () => {
+export const saveCurrentState = () => {
     localStorage.setItem('game', JSON.stringify({ board: BOARD }));
 };
 
