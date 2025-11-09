@@ -1,48 +1,81 @@
 import { createElement } from "./elements.js";
-import { initMobileControls } from "./game.js";
+import { initMobileControls } from './game.js';
 
 const loadGameState = () => {
-    const saved = localStorage.getItem('game');
+    const saved = localStorage.getItem('gameState');
     if (saved) {
         const gameState = JSON.parse(saved);
-        return gameState.board;
+        return {
+            board: gameState.board || [
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]
+            ],
+            gameStarted: gameState.gameStarted || false
+        };
     }
-    return null;
+    return {
+        board: [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
+        ],
+        gameStarted: false
+    };
 };
 
+const initialGameState = loadGameState();
+export let gameStarted = initialGameState.gameStarted;
+export let BOARD = initialGameState.board;
+
 const HEADERS = ["Username", "Score", "Submission Date"];
-export var BOARD = loadGameState() || [
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0]
-];
 
 const startBtn = document.getElementById('startBtn');
 
 const startGame = () => {
+    gameStarted = true;
+    createBoard();
     addNumbersBoard();
-    initMobileControls(); 
-    startBtn.style.display = 'none'; 
+    startBtn.style.display = 'none';
+    saveGameState(BOARD, gameStarted);
+    initMobileControls();
 }
 
 startBtn.addEventListener('click', startGame);
 
-const createBoard = () => {
+if (gameStarted) {
+    document.addEventListener("DOMContentLoaded",
+        startGame);
+}
+
+export const createBoard = () => {
     const main = document.querySelector('main');
+
+    const existingSection = document.querySelector('.boardSection');
+    if (existingSection) {
+        existingSection.remove();
+    }
 
     const section = createElement({ tag: 'section', className: 'boardSection' })
 
-    main.appendChild(section);
+    const controls = document.querySelector('.controlsSection');
 
-    if (isBoardEmpty()) {
+    main.insertBefore(section, controls);
+
+    if (gameStarted) {
+        addNumbersBoard();
+    }
+
+    if (isBoardEmpty() && gameStarted) {
         updateBoard();
         updateBoard();
-        saveCurrentState();
+        saveGameState();
     }
 };
 
-const addNumbersBoard = () => {
+function addNumbersBoard() {
     const boardSection = document.querySelector('.boardSection');
 
     const boardContainer = createElement({ tag: 'div', className: 'numContainer' })
@@ -134,7 +167,7 @@ const createResultsTable = () => {
     return div;
 };
 
-const leadersModal = () => {
+export const leadersModal = () => {
     const main = document.querySelector('main');
 
     const modal = createElement({
@@ -215,12 +248,23 @@ export const updateBoard = () => {
     }
 }
 
-export const saveCurrentState = () => {
-    localStorage.setItem('game', JSON.stringify({ board: BOARD }));
-};
-
 const isBoardEmpty = () => {
     return BOARD.every(row => row.every(cell => cell == 0));
+};
+
+export const saveGameState = (board = BOARD, gameStartedFlag = gameStarted) => {
+    const gameState = {
+        board: board,
+        gameStarted: gameStartedFlag
+    };
+    localStorage.setItem('gameState', JSON.stringify(gameState));
+
+    BOARD = board;
+    gameStarted = gameStartedFlag;
+};
+
+export const clearGameState = () => {
+    localStorage.removeItem('gameState');
 };
 
 document.addEventListener("DOMContentLoaded", function () {
