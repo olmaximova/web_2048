@@ -1,7 +1,7 @@
 import { createElement } from "./elements.js";
 import { initMobileControls } from './game.js';
 
-const loadGameState = () => {
+export const loadGameState = () => {
     const saved = localStorage.getItem('gameState');
     if (saved) {
         const gameState = JSON.parse(saved);
@@ -26,28 +26,43 @@ const loadGameState = () => {
     };
 };
 
-const initialGameState = loadGameState();
-export let gameStarted = initialGameState.gameStarted;
-export let BOARD = initialGameState.board;
+export const gameState = {
+    board: loadGameState().board,
+    started: loadGameState().gameStarted
+}
+
+export const setGameStarted = (value) => {
+    gameState.started = value;
+}
+
+export const setBoard = (newBoard) => {
+    for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+            gameState.board[i][j] = newBoard[i][j];
+        }
+    }
+}
+
+export const getGameStarted = () => gameState.started;
+export const getBoard = () => gameState.board;
 
 const HEADERS = ["Username", "Score", "Submission Date"];
 
 const startBtn = document.getElementById('startBtn');
 
-const startGame = () => {
-    gameStarted = true;
+export const startGame = () => {
+    setGameStarted(true);
     createBoard();
     addNumbersBoard();
     startBtn.style.display = 'none';
-    saveGameState(BOARD, gameStarted);
+    saveGameState();
     initMobileControls();
 }
 
 startBtn.addEventListener('click', startGame);
 
-if (gameStarted) {
-    document.addEventListener("DOMContentLoaded",
-        startGame);
+if (getGameStarted()) {
+    document.addEventListener("DOMContentLoaded", startGame);
 }
 
 export const createBoard = () => {
@@ -64,23 +79,28 @@ export const createBoard = () => {
 
     main.insertBefore(section, controls);
 
-    if (gameStarted) {
+    if (getGameStarted()) {
         addNumbersBoard();
     }
 
-    if (isBoardEmpty() && gameStarted) {
+    if (isBoardEmpty() && getGameStarted()) {
         updateBoard();
         updateBoard();
         saveGameState();
     }
 };
 
-function addNumbersBoard() {
+export function addNumbersBoard() {
     const boardSection = document.querySelector('.boardSection');
+
+    const existingContainer = document.querySelector('.numContainer');
+    if (existingContainer) {
+        existingContainer.remove();
+    }
 
     const boardContainer = createElement({ tag: 'div', className: 'numContainer' })
 
-    BOARD.forEach((row, rowIndex) => {
+    getBoard().forEach((row, rowIndex) => {
         row.forEach((cell, colIndex) => {
 
             const cellElement = createElement({
@@ -117,7 +137,7 @@ export const renderBoard = () => {
         boardContainer.removeChild(boardContainer.firstChild);
     }
 
-    BOARD.forEach((row, rowIndex) => {
+    getBoard().forEach((row, rowIndex) => {
         row.forEach((cell, colIndex) => {
 
             const cellElement = createElement({
@@ -224,7 +244,7 @@ const openCloseModal = (type) => {
 const generateNumsGrid = () => {
     const squares = [];
 
-    BOARD.forEach((row, rowIndex) => {
+    getBoard().forEach((row, rowIndex) => {
         row.forEach((cell, colIndex) => {
             if (cell === 0) {
                 squares.push({ row: rowIndex, col: colIndex });
@@ -239,28 +259,29 @@ const generateNumsGrid = () => {
 
 export const updateBoard = () => {
     const num = generateNumsGrid();
+    
     const row = num.row;
     const col = num.col;
     const values = [2, 4];
 
-    if (BOARD[row][col] == 0) {
-        BOARD[row][col] = values[Math.floor(Math.random() * values.length)];
+    const board = getBoard();
+
+    if (board[row][col] == 0) {
+        board[row][col] = values[Math.floor(Math.random() * values.length)];
+        setBoard(board);
     }
 }
 
 const isBoardEmpty = () => {
-    return BOARD.every(row => row.every(cell => cell == 0));
+    return getBoard().every(row => row.every(cell => cell == 0));
 };
 
-export const saveGameState = (board = BOARD, gameStartedFlag = gameStarted) => {
+export const saveGameState = () => {
     const gameState = {
-        board: board,
-        gameStarted: gameStartedFlag
+        board:  getBoard(),
+        gameStarted: getGameStarted()
     };
     localStorage.setItem('gameState', JSON.stringify(gameState));
-
-    BOARD = board;
-    gameStarted = gameStartedFlag;
 };
 
 export const clearGameState = () => {

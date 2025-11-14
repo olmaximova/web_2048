@@ -1,5 +1,4 @@
-import { BOARD, updateBoard, saveGameState, createBoard, renderBoard, gameStarted, addNumbersBoard } from './main.js';
-import { createElement } from './elements.js';
+import { updateBoard, saveGameState, renderBoard, clearGameState, startGame, setBoard, getBoard, setGameStarted, getGameStarted } from './main.js';
 
 document.addEventListener('keydown', function (event) {
     event.preventDefault();
@@ -32,15 +31,16 @@ document.addEventListener('keydown', function (event) {
 
 const move = (direction) => {
     let moved = false;
+    const board = getBoard();
 
     for (let i = 0; i < 4; i++) {
         let line = [];
 
         if (direction === 'left' || direction === 'right') {
-            line = [...BOARD[i]];
+            line = [...board[i]];
         } else {
             for (let j = 0; j < 4; j++) {
-                line.push(BOARD[j][i]);
+                line.push(board[j][i]);
             }
         }
 
@@ -50,6 +50,7 @@ const move = (direction) => {
             if (newLine[j] === newLine[j + 1]) {
                 newLine[j] *= 2;
                 newLine[j + 1] = 0;
+                moved = true;
             }
         }
 
@@ -67,17 +68,21 @@ const move = (direction) => {
             let oldValue, newValue;
 
             if (direction === 'left' || direction === 'right') {
-                oldValue = BOARD[i][j];
+                oldValue = board[i][j];
                 newValue = newLine[j];
                 if (oldValue !== newValue) moved = true;
-                BOARD[i][j] = newValue;
+                board[i][j] = newValue;
             } else {
-                oldValue = BOARD[j][i];
+                oldValue = board[j][i];
                 newValue = newLine[j];
                 if (oldValue !== newValue) moved = true;
-                BOARD[j][i] = newValue;
+                board[j][i] = newValue;
             }
         }
+    }
+
+    if (moved) {
+        setBoard(board);
     }
 
     return moved;
@@ -91,7 +96,7 @@ const isMobile = () => {
 export const initMobileControls = () => {
     const mobileControls = document.querySelector('.mobile-controls');
 
-    if (isMobile() && gameStarted) {
+    if (isMobile() && getGameStarted()) {
         mobileControls.style.display = 'flex';
         setupMobileControls();
     } else {
@@ -99,14 +104,14 @@ export const initMobileControls = () => {
     }
 }
 
-const setupMobileControls = ()  => {
+const setupMobileControls = () => {
     document.getElementById('up-btn').addEventListener('click', () => handleMobileMove('up'));
     document.getElementById('down-btn').addEventListener('click', () => handleMobileMove('down'));
     document.getElementById('left-btn').addEventListener('click', () => handleMobileMove('left'));
     document.getElementById('right-btn').addEventListener('click', () => handleMobileMove('right'));
 }
 
-const handleMobileMove = (direction)  => {
+const handleMobileMove = (direction) => {
     const moved = move(direction);
     if (moved) {
         updateBoard();
@@ -114,5 +119,25 @@ const handleMobileMove = (direction)  => {
         renderBoard();
     }
 }
+
+const newGameBtn = document.getElementById('newGameHeaderBtn');
+newGameBtn.addEventListener('click', () => newGame());
+
+export const newGame = () => {
+    clearGameState();
+    resetBoard();
+    startGame();
+};
+
+export const resetBoard = () => {
+    const newBoard = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+    ];
+    setBoard(newBoard);
+    setGameStarted(false);
+};
 
 window.addEventListener('resize', initMobileControls);
