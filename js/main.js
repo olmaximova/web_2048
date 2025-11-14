@@ -1,27 +1,18 @@
 import { createElement } from "./elements.js";
 import { initMobileControls } from './game.js';
+import { BOARD, HEADERS } from "./data.js";
 
 export const loadGameState = () => {
     const saved = localStorage.getItem('gameState');
     if (saved) {
         const gameState = JSON.parse(saved);
         return {
-            board: gameState.board || [
-                [0, 0, 0, 0],
-                [0, 0, 0, 0],
-                [0, 0, 0, 0],
-                [0, 0, 0, 0]
-            ],
+            board: gameState.board || BOARD,
             gameStarted: gameState.gameStarted || false
         };
     }
     return {
-        board: [
-            [0, 0, 0, 0],
-            [0, 0, 0, 0],
-            [0, 0, 0, 0],
-            [0, 0, 0, 0]
-        ],
+        board: BOARD,
         gameStarted: false
     };
 };
@@ -45,8 +36,6 @@ export const setBoard = (newBoard) => {
 
 export const getGameStarted = () => gameState.started;
 export const getBoard = () => gameState.board;
-
-const HEADERS = ["Username", "Score", "Submission Date"];
 
 const startBtn = document.getElementById('startBtn');
 

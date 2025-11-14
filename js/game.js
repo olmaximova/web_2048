@@ -1,4 +1,5 @@
 import { updateBoard, saveGameState, renderBoard, clearGameState, startGame, setBoard, getBoard, setGameStarted, getGameStarted } from './main.js';
+import { BOARD } from './data.js';
 
 document.addEventListener('keydown', function (event) {
     event.preventDefault();
@@ -130,12 +131,7 @@ export const newGame = () => {
 };
 
 export const resetBoard = () => {
-    const newBoard = [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
-    ];
+    const newBoard = BOARD;
     setBoard(newBoard);
     setGameStarted(false);
 };
