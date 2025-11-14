@@ -1,4 +1,7 @@
-import { updateBoard, saveGameState, renderBoard, clearGameState, startGame, setBoard, getBoard, setGameStarted, getGameStarted } from './main.js';
+import {
+    updateBoard, saveGameState, renderBoard, clearGameState,
+    startGame, setBoard, getBoard, setGameStarted, getGameStarted
+} from './main.js';
 import { BOARD } from './data.js';
 
 document.addEventListener('keydown', function (event) {

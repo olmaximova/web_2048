@@ -248,7 +248,7 @@ const generateNumsGrid = () => {
 
 export const updateBoard = () => {
     const num = generateNumsGrid();
-    
+
     const row = num.row;
     const col = num.col;
     const values = [2, 4];
@@ -267,7 +267,7 @@ const isBoardEmpty = () => {
 
 export const saveGameState = () => {
     const gameState = {
-        board:  getBoard(),
+        board: getBoard(),
         gameStarted: getGameStarted()
     };
     localStorage.setItem('gameState', JSON.stringify(gameState));
