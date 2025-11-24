@@ -10,7 +10,7 @@ export const startGame = () => {
     setGameStarted(true);
     createBoard();
     addNumbersBoard();
-    startBtn.style.display = 'none';
+    startBtn.classList.add('notshow');
     addToHistory({
         board: JSON.parse(JSON.stringify(getBoard())),
         score: getScore()
@@ -130,7 +130,6 @@ export const leadersModal = () => {
     const modal = createElement({
         tag: "section",
         className: "modalResultsLeaders",
-        attributes: { style: "display: none" },
         events: {
             click: (event) => {
                 if (event.target === modal) {
@@ -168,16 +167,16 @@ export const leadersModal = () => {
 
 const openCloseModal = (type) => {
     const modal = document.querySelector('.modalResultsLeaders');
+    const controls = document.querySelector('.mobile-controls');
 
     switch (type) {
         case 'close':
             modal.classList.remove('show');
-            modal.style.display = 'none';
-
+            initMobileControls();
             break;
         case 'open':
-            modal.style.display = 'flex';
             modal.classList.add('show');
+            controls.classList.remove('showControls');
             break;
     }
 }

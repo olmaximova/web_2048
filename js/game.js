@@ -6,7 +6,7 @@ document.addEventListener('keydown', function (event) {
     if (event.target.id === 'player-name' || event.target.tagName === 'INPUT') {
         return;
     }
-    
+
     event.preventDefault();
 
     let moved = false;
@@ -111,10 +111,10 @@ export const initMobileControls = () => {
     const mobileControls = document.querySelector('.mobile-controls');
 
     if (isMobile() && getGameStarted()) {
-        mobileControls.style.display = 'flex';
+        mobileControls.classList.add('showControls');
         setupMobileControls();
     } else {
-        mobileControls.style.display = 'none';
+        mobileControls.classList.remove('showControls');
     }
 }
 

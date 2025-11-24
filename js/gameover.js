@@ -122,7 +122,7 @@ const showGameMessage = (message, type, score = 0) => {
         events: {
             click: () => {
                 newGame();
-                messageElement.style.display = 'none';
+                messageElement.classList.add('hidden');
             }
         }
     });
@@ -135,7 +135,7 @@ const showGameMessage = (message, type, score = 0) => {
 
     setTimeout(() => nameInput.focus(), 100);
 
-    messageElement.style.display = 'block';
+    messageElement.classList.remove('hidden');
 };
 
 const showTemporaryMessage = (message, originalMessageElement) => {
@@ -146,7 +146,7 @@ const showTemporaryMessage = (message, originalMessageElement) => {
     tempMessage.appendChild(messageDiv);
     document.body.appendChild(tempMessage);
 
-    originalMessageElement.style.display = 'none';
+    originalMessageElement.classList.add('hidden');
 
     setTimeout(() => tempMessage.remove(), 2000);
 };
