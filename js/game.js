@@ -1,6 +1,6 @@
 import {
-    updateBoard, saveGameState, renderBoard, clearGameState,
-    startGame, setBoard, getBoard, setGameStarted, getGameStarted
+    updateBoard, saveGameState, renderBoard, gameState,
+    startGame, setBoard, getBoard, resetBoard, getGameStarted, getScore
 } from './main.js';
 import { BOARD } from './data.js';
 
@@ -36,6 +36,7 @@ document.addEventListener('keydown', function (event) {
 const move = (direction) => {
     let moved = false;
     const board = getBoard();
+    let points = 0;
 
     for (let i = 0; i < 4; i++) {
         let line = [];
@@ -52,9 +53,12 @@ const move = (direction) => {
 
         for (let j = 0; j < newLine.length - 1; j++) {
             if (newLine[j] === newLine[j + 1]) {
-                newLine[j] *= 2;
+                const toAdd = newLine[j] * 2;
+                points += toAdd;
+                newLine[j] = toAdd;
                 newLine[j + 1] = 0;
                 moved = true;
+                j++
             }
         }
 
@@ -87,6 +91,9 @@ const move = (direction) => {
 
     if (moved) {
         setBoard(board);
+        if (points > 0) {
+            updateScore(points);
+        }
     }
 
     return moved;
@@ -127,16 +134,27 @@ const handleMobileMove = (direction) => {
 const newGameBtn = document.getElementById('newGameHeaderBtn');
 newGameBtn.addEventListener('click', () => newGame());
 
-export const newGame = () => {
-    clearGameState();
+const newGame = () => {
     resetBoard();
+    displayScore();
     startGame();
 };
 
-export const resetBoard = () => {
-    const newBoard = BOARD;
-    setBoard(newBoard);
-    setGameStarted(false);
+const updateScore = (points) => {
+    gameState.score += points;
+    saveGameState();
+    displayScore();
+    return gameState.score;
 };
 
+const displayScore = () => {
+    const score = document.getElementById('score');
+    
+    if (score) score.textContent = getScore()
+}
+
 window.addEventListener('resize', initMobileControls);
+
+document.addEventListener("DOMContentLoaded", function () {
+    displayScore();
+});
