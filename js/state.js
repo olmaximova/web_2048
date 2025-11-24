@@ -8,16 +8,14 @@ export const loadGameState = () => {
             board: gameState.board || BOARD,
             gameStarted: gameState.gameStarted || false,
             score: gameState.score || 0,
-            history: gameState.history || [],
-            historyIndex: gameState.historyIndex || -1
+            history: gameState.history || []
         };
     }
     return {
         board: BOARD,
         gameStarted: false,
         score: 0,
-        history: [],
-        historyIndex: -1
+        history: []
     };
 };
 
@@ -27,8 +25,7 @@ export const gameState = {
     board: initialState.board,
     started: initialState.gameStarted,
     score: initialState.score,
-    history: initialState.history,
-    historyIndex: initialState.historyIndex 
+    history: initialState.history
 }
 
 export const setGameStarted = (value) => {
@@ -44,12 +41,14 @@ export const setBoard = (newBoard) => {
 export const getGameStarted = () => gameState.started;
 export const getBoard = () => gameState.board;
 export const getScore = () => gameState.score;
+export const getHistory = () => gameState.history;
 
 export const saveGameState = () => {
     const gameState = {
         board: getBoard(),
         gameStarted: getGameStarted(),
-        score: getScore()
+        score: getScore(),
+        history: getHistory(),
     };
     localStorage.setItem('gameState', JSON.stringify(gameState));
 }

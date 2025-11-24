@@ -25,6 +25,7 @@ document.addEventListener('keydown', function (event) {
 
     if (moved) {
         updateBoard();
+        addToHistory();
         saveGameState();
         renderBoard();
     }
@@ -122,6 +123,7 @@ const handleMobileMove = (direction) => {
     const moved = move(direction);
     if (moved) {
         updateBoard();
+        addToHistory();
         saveGameState();
         renderBoard();
     }
@@ -145,9 +147,49 @@ const updateScore = (points) => {
 
 const displayScore = () => {
     const score = document.getElementById('score');
-    
+
     if (score) score.textContent = getScore()
 }
+
+export const addToHistory = () => {
+    const currentState = {
+        board: JSON.parse(JSON.stringify(getBoard())),
+        score: getScore()
+    };
+
+    gameState.history.push(currentState);
+
+    if (gameState.history.length > 50) {
+        gameState.history.shift();
+    }
+
+    saveGameState();
+}
+
+const undoMove = () => {
+    if (gameState.history.length < 2) {
+        return false;
+    }
+
+    gameState.history.pop();
+
+    const previousState = gameState.history[gameState.history.length - 1];
+
+    gameState.board = JSON.parse(JSON.stringify(previousState.board));
+    gameState.score = previousState.score;
+    gameState.historyIndex = gameState.history.length - 1;
+
+    saveGameState();
+    renderBoard();
+    displayScore();
+    return true;
+}
+
+document.getElementById('backtBtn').addEventListener('click', () => {
+    if (getGameStarted()) {
+        undoMove();
+    }
+});
 
 window.addEventListener('resize', initMobileControls);
 

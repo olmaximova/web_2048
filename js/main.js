@@ -1,7 +1,7 @@
 import { createElement } from "./elements.js";
-import { initMobileControls } from './game.js';
+import { initMobileControls, addToHistory } from './game.js';
 import { HEADERS } from "./data.js";
-import { setGameStarted, setBoard, getGameStarted, getBoard, saveGameState } from './state.js'
+import { setGameStarted, setBoard, getGameStarted, getBoard, saveGameState, getScore } from './state.js'
 
 const startBtn = document.getElementById('startBtn');
 
@@ -10,6 +10,10 @@ export const startGame = () => {
     createBoard();
     addNumbersBoard();
     startBtn.style.display = 'none';
+    addToHistory({
+        board: JSON.parse(JSON.stringify(getBoard())),
+        score: getScore()
+    });
     saveGameState();
     initMobileControls();
 }
@@ -79,9 +83,9 @@ export function addNumbersBoard() {
     }
 
     const boardContainer = createElement({ tag: 'div', className: 'numContainer' })
-    
+
     renderBoardCells(boardContainer);
-    
+
     boardSection.appendChild(boardContainer);
 };
 
