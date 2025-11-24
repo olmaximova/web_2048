@@ -59,7 +59,6 @@ export const createBoard = () => {
     }
 
     const section = createElement({ tag: 'section', className: 'boardSection' })
-
     const controls = document.querySelector('.controlsSection');
 
     main.insertBefore(section, controls);
@@ -75,6 +74,32 @@ export const createBoard = () => {
     }
 };
 
+function renderBoardCells(container) {
+    getBoard().forEach((row, rowIndex) => {
+        row.forEach((cell, colIndex) => {
+            const cellElement = createElement({
+                tag: 'div',
+                className: 'numCell',
+                dataset: { row: rowIndex, col: colIndex }
+            });
+
+            if (cell !== 0) {
+                const tile = createElement({
+                    tag: 'div',
+                    className: 'tile',
+                    text: cell.toString(),
+                    attributes: {
+                        'data-value': cell.toString()
+                    }
+                });
+                cellElement.appendChild(tile);
+            }
+
+            container.appendChild(cellElement);
+        });
+    });
+}
+
 export function addNumbersBoard() {
     const boardSection = document.querySelector('.boardSection');
 
@@ -84,34 +109,9 @@ export function addNumbersBoard() {
     }
 
     const boardContainer = createElement({ tag: 'div', className: 'numContainer' })
-
-    getBoard().forEach((row, rowIndex) => {
-        row.forEach((cell, colIndex) => {
-
-            const cellElement = createElement({
-                tag: 'div',
-                className: 'numCell',
-                dataset: { row: rowIndex, col: colIndex }
-            });
-
-            if (cell !== 0) {
-
-                const tile = createElement({
-                    tag: 'div',
-                    className: 'tile',
-                    text: cell.toString(),
-                    attributes: {
-                        'data-value': cell.toString()
-                    }
-                });
-
-                cellElement.appendChild(tile);
-            }
-
-            boardContainer.appendChild(cellElement);
-        });
-    });
-
+    
+    renderBoardCells(boardContainer);
+    
     boardSection.appendChild(boardContainer);
 };
 
@@ -122,30 +122,7 @@ export const renderBoard = () => {
         boardContainer.removeChild(boardContainer.firstChild);
     }
 
-    getBoard().forEach((row, rowIndex) => {
-        row.forEach((cell, colIndex) => {
-
-            const cellElement = createElement({
-                tag: 'div',
-                className: 'numCell',
-                dataset: { row: rowIndex, col: colIndex }
-            })
-
-            if (cell !== 0) {
-                const tile = createElement({
-                    tag: 'div',
-                    className: 'tile',
-                    text: cell.toString(),
-                    attributes: {
-                        'data-value': cell.toString()
-                    }
-                })
-                cellElement.appendChild(tile);
-            }
-
-            boardContainer.appendChild(cellElement);
-        });
-    });
+    renderBoardCells(boardContainer);
 };
 
 const createResultsTable = () => {
