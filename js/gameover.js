@@ -56,6 +56,8 @@ const saveToLeaderboard = (name, score) => {
 };
 
 const showGameMessage = (message, type, score = 0) => {
+    const controls = document.querySelector('.mobile-controls');
+    controls.classList.remove('showControls');
 
     const main = document.querySelector('main');
 
