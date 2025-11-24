@@ -1,8 +1,5 @@
-import {
-    updateBoard, saveGameState, renderBoard, gameState,
-    startGame, setBoard, getBoard, resetBoard, getGameStarted, getScore
-} from './main.js';
-import { BOARD } from './data.js';
+import { updateBoard, renderBoard, startGame } from './main.js';
+import { gameState, setBoard, getGameStarted, getBoard, getScore, saveGameState, resetBoard } from './state.js'
 
 document.addEventListener('keydown', function (event) {
     event.preventDefault();
@@ -58,7 +55,6 @@ const move = (direction) => {
                 newLine[j] = toAdd;
                 newLine[j + 1] = 0;
                 moved = true;
-                j++
             }
         }
 
