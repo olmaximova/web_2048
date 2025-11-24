@@ -10,7 +10,7 @@ export const startGame = () => {
     setGameStarted(true);
     createBoard();
     addNumbersBoard();
-    startBtn.classList.add('notshow');
+    startBtn.style.display = 'none';
     addToHistory({
         board: JSON.parse(JSON.stringify(getBoard())),
         score: getScore()

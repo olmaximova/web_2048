@@ -51,16 +51,16 @@ button {
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-
-#startBtn {
+/* 
+header #startBtn {
     display: flex;
     margin: 0 auto; 
     justify-content: center;
 }
 
-#startBtn.notshow {
-    display: none;
-}
+header #startBtn.notshow {
+    display: none !important;
+} */
 
 button:hover {
     background-color: #fff;
