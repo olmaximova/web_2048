@@ -1,7 +1,8 @@
 import { createElement } from "./elements.js";
 import { initMobileControls, addToHistory } from './game.js';
 import { HEADERS } from "./data.js";
-import { setGameStarted, setBoard, getGameStarted, getBoard, saveGameState, getScore } from './state.js'
+import { setGameStarted, setBoard, getGameStarted, getBoard, saveGameState, getScore } from './state.js';
+import { updateLeaders } from './gameover.js'
 
 const startBtn = document.getElementById('startBtn');
 
@@ -151,7 +152,10 @@ export const leadersModal = () => {
         events: { click: () => openCloseModal('close') }
     });
 
-    document.getElementById('leadersBtn').addEventListener('click', () => openCloseModal('open'));
+    document.getElementById('leadersBtn').addEventListener('click', () => {
+        openCloseModal('open');
+        updateLeaders();
+    });
 
     modalHeader.append(title, closeBtn);
 
@@ -169,6 +173,7 @@ const openCloseModal = (type) => {
         case 'close':
             modal.classList.remove('show');
             modal.style.display = 'none';
+
             break;
         case 'open':
             modal.style.display = 'flex';

@@ -1,7 +1,12 @@
 import { updateBoard, renderBoard, startGame } from './main.js';
 import { gameState, setBoard, getGameStarted, getBoard, getScore, saveGameState, resetBoard } from './state.js'
+import { checkGameStatus } from './gameover.js'
 
 document.addEventListener('keydown', function (event) {
+    if (event.target.id === 'player-name' || event.target.tagName === 'INPUT') {
+        return;
+    }
+    
     event.preventDefault();
 
     let moved = false;
@@ -28,6 +33,7 @@ document.addEventListener('keydown', function (event) {
         addToHistory();
         saveGameState();
         renderBoard();
+        checkGameStatus();
     }
 });
 
@@ -126,13 +132,14 @@ const handleMobileMove = (direction) => {
         addToHistory();
         saveGameState();
         renderBoard();
+        checkGameStatus();
     }
 }
 
 const newGameBtn = document.getElementById('newGameHeaderBtn');
 newGameBtn.addEventListener('click', () => newGame());
 
-const newGame = () => {
+export const newGame = () => {
     resetBoard();
     displayScore();
     startGame();

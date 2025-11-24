@@ -57,5 +57,6 @@ export const resetBoard = () => {
     gameState.board = JSON.parse(JSON.stringify(BOARD));
     gameState.started = false;
     gameState.score = 0;
+    gameState.history = [];
     saveGameState();
 };
