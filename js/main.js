@@ -27,11 +27,7 @@ export const setGameStarted = (value) => {
 }
 
 export const setBoard = (newBoard) => {
-    for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
-            gameState.board[i][j] = newBoard[i][j];
-        }
-    }
+    gameState.board = JSON.parse(JSON.stringify(newBoard));
 }
 
 export const getGameStarted = () => gameState.started;
