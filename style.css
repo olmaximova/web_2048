@@ -51,16 +51,6 @@ button {
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-/* 
-header #startBtn {
-    display: flex;
-    margin: 0 auto; 
-    justify-content: center;
-}
-
-header #startBtn.notshow {
-    display: none !important;
-} */
 
 button:hover {
     background-color: #fff;
@@ -162,6 +152,12 @@ hr {
     font-weight: 800;
     width: calc((min(400px, 90vw) - 20px - 30px) / 4);
     height: calc((min(400px, 90vw) - 20px - 30px) / 4);
+    transition: all 0.2s ease;
+}
+
+.tile.new {
+    opacity: 0;
+    transform: scale(0);
 }
 
 .tile[data-value="2"] {
@@ -351,9 +347,9 @@ hr {
 .control-btn {
     width: 70px;
     height: 70px;
-    border: 2px solid #bbada0;
+    border: 2px solid black;
     border-radius: 10px;
-    background-color: #faf8ef;
+    background-color: #f2f2f2;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -441,7 +437,6 @@ hr {
     border: none;
     border-radius: 5px;
     text-align: center;
-    font-family: 'Outfit', sans-serif;
     border: 1px solid #000
 }
 

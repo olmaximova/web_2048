@@ -4,13 +4,10 @@ import { HEADERS } from "./data.js";
 import { setGameStarted, setBoard, getGameStarted, getBoard, saveGameState, getScore } from './state.js';
 import { updateLeaders } from './gameover.js'
 
-const startBtn = document.getElementById('startBtn');
-
 export const startGame = () => {
     setGameStarted(true);
     createBoard();
     addNumbersBoard();
-    startBtn.style.display = 'none';
     addToHistory({
         board: JSON.parse(JSON.stringify(getBoard())),
         score: getScore()
@@ -19,7 +16,6 @@ export const startGame = () => {
     initMobileControls();
 }
 
-startBtn.addEventListener('click', newGame);
 
 export const createBoard = () => {
     const main = document.querySelector('main');
@@ -89,11 +85,51 @@ export function addNumbersBoard() {
 export const renderBoard = () => {
     const boardContainer = document.querySelector('.numContainer');
 
-    while (boardContainer.firstChild) {
-        boardContainer.removeChild(boardContainer.firstChild);
-    }
+    const board = getBoard();
 
-    renderBoardCells(boardContainer);
+    const newContainer = document.createElement('div');
+    newContainer.className = 'numContainer';
+
+    board.forEach((row, rowIndex) => {
+        row.forEach((cell, colIndex) => {
+            const cellElement = createElement({
+                tag: 'div',
+                className: 'numCell',
+                dataset: { row: rowIndex, col: colIndex }
+            });
+
+            if (cell !== 0) {
+                const existingTile = Array.from(boardContainer.querySelectorAll('.tile')).find(tile => {
+                    const parent = tile.parentElement;
+                    return parent &&
+                        parseInt(parent.dataset.row) === rowIndex &&
+                        parseInt(parent.dataset.col) === colIndex &&
+                        tile.textContent === cell.toString();
+                });
+
+                const tile = existingTile ? existingTile : createElement({
+                    tag: 'div',
+                    className: 'tile' + (!existingTile ? ' new' : ''),
+                    text: cell.toString(),
+                    attributes: {
+                        'data-value': cell.toString()
+                    }
+                });
+
+                if (!existingTile) {
+                    setTimeout(() => {
+                        tile.classList.remove('new');
+                    }, 10);
+                }
+
+                cellElement.appendChild(tile);
+            }
+
+            newContainer.appendChild(cellElement);
+        });
+    });
+
+    boardContainer.parentNode.replaceChild(newContainer, boardContainer);
 };
 
 const createResultsTable = () => {
