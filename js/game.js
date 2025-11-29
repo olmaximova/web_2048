@@ -132,11 +132,16 @@ const setupMobileControls = () => {
             e.preventDefault();
             handleMobileMove(direction);
         });
-        
-        btn.addEventListener('click', (e) => e.preventDefault());
     });
 }
+
+let isMove = false; 
+
 const handleMobileMove = (direction) => {
+    if (isMove) return; 
+    
+    isMove = true;
+    
     const moved = move(direction);
     if (moved) {
         updateBoard();
@@ -145,6 +150,10 @@ const handleMobileMove = (direction) => {
         renderBoard();
         checkGameStatus();
     }
+    
+    setTimeout(() => {
+        isMove = false;
+    }, 300);
 }
 
 const newGameBtn = document.getElementById('newGameHeaderBtn');
