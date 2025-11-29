@@ -119,12 +119,23 @@ export const initMobileControls = () => {
 }
 
 const setupMobileControls = () => {
-    document.getElementById('up-btn').addEventListener('click', () => handleMobileMove('up'));
-    document.getElementById('down-btn').addEventListener('click', () => handleMobileMove('down'));
-    document.getElementById('left-btn').addEventListener('click', () => handleMobileMove('left'));
-    document.getElementById('right-btn').addEventListener('click', () => handleMobileMove('right'));
+    const buttons = {
+        'up-btn': 'up',
+        'down-btn': 'down', 
+        'left-btn': 'left',
+        'right-btn': 'right'
+    };
+    
+    Object.entries(buttons).forEach(([id, direction]) => {
+        const btn = document.getElementById(id);
+        btn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleMobileMove(direction);
+        });
+        
+        btn.addEventListener('click', (e) => e.preventDefault());
+    });
 }
-
 const handleMobileMove = (direction) => {
     const moved = move(direction);
     if (moved) {

@@ -251,4 +251,5 @@ const isBoardEmpty = () => {
 document.addEventListener("DOMContentLoaded", function () {
     createBoard();
     leadersModal();
+    initMobileControls();
 });
