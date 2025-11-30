@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href='style.css'>
+    <link rel="icon" type="image/x-icon" href="images/favicon_3.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <title>2048 Game</title>
+</head>
+
+<body>
+    <header>
+        <h1>2048</h1>
+        <hr>
+    </header>
+    <main>
+        <section class="scoreSection">
+            <h2>Score: <span id="score">0</span></h2>
+        </section>
+        <button id="newGameHeaderBtn">New Game</button>
+        <section class="controlsSection">
+            <!-- кнопки для управления на мобильных устройствах -->
+            <div class="mobile-controls"> 
+                <div class="controls-row">
+                    <button class="control-btn" id="up-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                            fill="#000000">
+                            <path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="controls-row">
+                    <button class="control-btn" id="left-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                            fill="#000000">
+                            <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+                        </svg>
+                    </button>
+                    <button class="control-btn" id="down-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                            fill="#000000">
+                            <path d="M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z" />
+                        </svg>
+                    </button>
+                    <button class="control-btn" id="right-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                            fill="#000000">
+                            <path d="m560-240-56-58 142-142H160v-80h486L504-662l56-58 240 240-240 240Z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <button id="backtBtn">Undo</button>
+        <button id="leadersBtn">View Leaders</button>
+    </footer>
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/game.js"></script>
+    <script type="module" src="js/elements.js"></script>
+    <script type="module" src="js/data.js"></script>
+    <script type="module" src="js/state.js"></script>
+    <script type="module" src="js/gameover.js"></script>
+</body>
+
+</html>
