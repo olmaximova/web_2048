@@ -1,5 +1,5 @@
 import { createElement } from "./elements.js";
-import { initMobileControls, addToHistory, newGame } from './game.js';
+import { initMobileControls, addToHistory } from './game.js';
 import { HEADERS } from "./data.js";
 import { setGameStarted, setBoard, getGameStarted, getBoard, saveGameState, getScore } from './state.js';
 import { updateLeaders } from './gameover.js'
